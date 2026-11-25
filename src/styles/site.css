@@ -40,22 +40,18 @@ img { display: block; max-width: 100%; }
 
 .site-header { background: var(--paper); border-bottom: 1px solid #6235461f; }
 .header-inner { min-height: 5.15rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.brand, .header-inner nav { display: flex; align-items: center; }
-.brand { gap: .72rem; flex: none; }
-.brand-emblem {
-  position: relative; display: block; flex: none; width: 3.9rem; aspect-ratio: 1.65;
-  overflow: hidden; isolation: isolate; border-radius: .85rem; background: var(--blush);
-  border: 1px solid #c886905e;
+.header-inner nav { display: flex; align-items: center; }
+.brand { display: inline-flex; flex: none; flex-direction: column; align-items: flex-start; gap: .13rem; padding-block: .25rem; }
+.brand-wordmark {
+  display: block; position: relative; width: 8.4rem; aspect-ratio: 2.865; overflow: hidden;
 }
-.brand-emblem img {
-  position: absolute; inset: -15.7% auto auto 50%; transform: translateX(-50%);
-  max-width: none; width: 300%; height: auto;
+.brand-wordmark img {
+  /* The source canvas has transparent margins around the lettering. */
+  position: absolute; inset: -18.06% auto auto -8.65%; max-width: none; width: 113.64%; height: auto;
 }
-.brand strong, .brand small { display: block; }
-.brand strong { font: 620 1.9rem/.95 var(--display); letter-spacing: -.037em; color: var(--berry); }
 .brand small {
-  margin-top: .31rem; color: var(--muted); white-space: nowrap; font-size: .67rem;
-  font-weight: 730; letter-spacing: .09em; text-transform: uppercase;
+  padding-inline-start: .16rem; color: var(--muted); white-space: nowrap; font-size: .65rem;
+  line-height: 1.25; font-weight: 730; letter-spacing: .1em; text-transform: uppercase;
 }
 .header-inner nav { gap: 1.55rem; font-weight: 700; font-size: .91rem; color: var(--berry); }
 .nav-link { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
@@ -245,9 +241,7 @@ html[data-motion="full"] .rail-in-view .collection-link:nth-child(3) { animation
 @media (max-width: 799px) {
   .shell { width: calc(100% - 2rem); }
   .header-inner { min-height: 4.45rem; gap: .6rem; }
-  .brand { gap: .5rem; }
-  .brand-emblem { width: 3.23rem; border-radius: .68rem; }
-  .brand strong { font-size: 1.57rem; }
+  .brand-wordmark { width: 7.45rem; }
   .brand small { font-size: .61rem; letter-spacing: .06em; }
   .header-inner nav { gap: .68rem; font-size: .79rem; }
   .nav-catalog { display: none; }
@@ -283,7 +277,7 @@ html[data-motion="full"] .rail-in-view .collection-link:nth-child(3) { animation
   .contact-pill span { display: none; }
 }
 @media (max-width: 359px) {
-  .brand-emblem { width: 3rem; }
+  .brand-wordmark { width: 6.9rem; }
   .header-inner nav { gap: .38rem; font-size: .72rem; }
   .hero-copy h1 { font-size: 2.62rem; }
   .product-details { gap: .29rem; }

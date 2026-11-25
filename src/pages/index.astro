@@ -6,6 +6,7 @@ import '../styles/site.css';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import logo from '../assets/marly-logo.webp';
+import marlySignature from '../assets/marly-assinatura.png';
 import vercunoLogo from '../assets/vercuno-branco.png';
 import Icon from '../components/Icon.astro';
 import ProductCard from '../components/ProductCard.astro';
@@ -52,10 +53,10 @@ const description = 'Veja fotos e preços dos buquês, cestas e presentes da Mar
     <header class="site-header">
       <div class="shell header-inner">
         <a class="brand" href="#inicio">
-          <span class="brand-emblem" aria-hidden="true">
-            <Image src={logo} alt="" width={384} loading="eager" />
+          <span class="brand-wordmark">
+            <Image src={marlySignature} alt="Marly" width={400} loading="eager" />
           </span>
-          <span><strong>Marly</strong><small>Cestas e Flores</small></span>
+          <small>Cestas e Flores</small>
         </a>
         <nav aria-label="Navegação principal">
           <a class="nav-catalog nav-link" href="#catalogo">Catálogo</a>
