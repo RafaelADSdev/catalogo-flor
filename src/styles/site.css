@@ -223,6 +223,10 @@ html[data-motion="full"] .rail-in-view .collection-link:nth-child(3) { animation
 }
 .motion-toggle span { border: 1px solid #f5d8df7a; padding: .09rem .43rem; border-radius: 2rem; font-size: .75rem; }
 .motion-toggle[aria-pressed="true"] span { background: var(--blush); color: var(--plum); border-color: var(--blush); }
+.footer-credit { display: flex; justify-content: center; padding-bottom: .75rem; }
+.footer-credit a { display: flex; align-items: center; gap: .65rem; min-height: 44px; color: var(--light-ink); font-size: .84rem; }
+.footer-credit a:hover span { text-decoration: underline; text-underline-offset: .25em; }
+.footer-credit img { width: 7rem; height: auto; }
 
 @media (max-width: 1119px) {
   .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
