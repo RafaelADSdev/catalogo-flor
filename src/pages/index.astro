@@ -1,0 +1,247 @@
+---
+import '@fontsource-variable/dm-sans/wght.css';
+import '@fontsource-variable/fraunces/wght.css';
+import '@fontsource-variable/fraunces/wght-italic.css';
+import '../styles/site.css';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import logo from '../assets/marly-logo.webp';
+import Icon from '../components/Icon.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { categories, heroAccent, heroProduct, mapDirections, mapEmbed, orderLink, products, shop } from '../catalog';
+
+const photos = import.meta.glob<ImageMetadata>('../assets/products/*.webp', { eager: true, import: 'default' });
+function photoFor(id: string) {
+  const photo = photos[`../assets/products/${id}.webp`];
+  if (!photo) throw new Error(`Foto ausente para o produto ${id}`);
+  return photo;
+}
+const heroPhoto = heroProduct ? photoFor(heroProduct.id) : undefined;
+const heroWidths = heroPhoto ? [420, 600, 800].filter(width => width < heroPhoto.width).concat(heroPhoto.width) : [];
+const accentPhoto = heroAccent && heroAccent.id !== heroProduct?.id ? photoFor(heroAccent.id) : undefined;
+const availableCategories = categories.filter(category => products.some(product => product.category === category));
+const collectionCovers = [
+  ['Buquês e flores', '28882814374643575'],
+  ['Cestas e cafés', '38540194298959297'],
+  ['Presentes', '25497427219955154'],
+].flatMap(([category, id]) => {
+  const item = products.find(product => product.id === id) ?? products.find(product => product.category === category);
+  return item ? [{ category, photo: photoFor(item.id) }] : [];
+});
+const title = 'Marly Cestas e Flores | Buquês, cestas e presentes em Recife';
+const description = 'Veja fotos e preços dos buquês, cestas e presentes da Marly, no Fundão, Recife. Escolha seu presente e fale pelo WhatsApp.';
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f9f1e7" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <link rel="icon" href={logo.src} type="image/webp" />
+    <title>{title}</title>
+  </head>
+  <body id="inicio">
+    <a class="skip-link" href="#catalogo">Ir para o catálogo</a>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="#inicio">
+          <Image src={logo} alt="" width={56} height={56} />
+          <span><strong>Marly</strong><small>Cestas e Flores</small></span>
+        </a>
+        <nav aria-label="Navegação principal">
+          <a class="nav-catalog nav-link" href="#catalogo">Catálogo</a>
+          <a class="nav-link" href="#localizacao">Como chegar</a>
+          <a class="contact-pill" href={orderLink()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={16} /> WhatsApp</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="shell hero-inner">
+          <div class="hero-copy">
+            <h1 id="hero-title"><span>Flores que</span> <em>falam por você.</em></h1>
+            <p>Buquês, cestas de café da manhã e presentes para encomendar em Recife.</p>
+            <a class="primary-action" href="#catalogo">Explorar catálogo <Icon name="arrow" size={18} /></a>
+          </div>
+          {heroProduct && heroPhoto && (
+            <div class="hero-deck">
+              <div class="hero-photo hero-main">
+                <Image src={heroPhoto} alt={heroProduct.name} widths={heroWidths} sizes="(min-width: 1360px) 490px, (min-width: 800px) 39vw, 78vw" loading="eager" fetchpriority="high" />
+              </div>
+              {accentPhoto && heroAccent && (
+                <div class="hero-photo hero-accent">
+                  <Image src={accentPhoto} alt={heroAccent.name} width={290} loading="eager" decoding="async" />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {collectionCovers.length > 0 && (
+        <section class="collection-rail shell" aria-labelledby="collection-title" data-collection-rail>
+          <h2 id="collection-title">Escolha por categoria</h2>
+          <div class="collection-grid">
+            {collectionCovers.map(({ category, photo }) => (
+              <a href="#catalogo" class="collection-link" data-collection={category}>
+                <Image src={photo} alt="" width={440} loading="lazy" decoding="async" />
+                <span>{category} <Icon name="diagonal" size={17} /></span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section id="catalogo" class="catalog shell" aria-labelledby="catalog-title" tabindex="-1">
+        <div class="catalog-heading">
+          <div>
+            <h2 id="catalog-title">Catálogo</h2>
+            {products.length > 0 && <p>Escolha um produto para pedir pelo WhatsApp.</p>}
+          </div>
+          <p class="catalog-count" data-result-count role="status">{products.length} produtos</p>
+        </div>
+
+        <div class="catalog-tools" data-catalog-tools hidden>
+          <div class="category-list" role="group" aria-label="Categorias de produtos">
+            <button type="button" data-filter="" aria-pressed="true">Todos</button>
+            {availableCategories.map(category => <button type="button" data-filter={category} aria-pressed="false">{category}</button>)}
+          </div>
+          <div class="search-field">
+            <Icon name="search" size={19} />
+            <label for="busca" class="sr-only">Buscar produto pelo nome</label>
+            <input id="busca" type="search" placeholder="Buscar produto" autocomplete="off" />
+          </div>
+        </div>
+
+        <ul class="product-grid">
+          {products.map(product => <ProductCard product={product} photo={photoFor(product.id)} />)}
+        </ul>
+        <div class="empty-state" data-empty hidden>
+          <p>Nenhum produto encontrado.</p>
+          <button type="button" class="secondary-action" data-reset>Limpar busca e filtros</button>
+        </div>
+        <div class="more-products">
+          <button type="button" class="secondary-action" data-more hidden>Ver mais produtos <Icon name="down" size={17} /></button>
+        </div>
+      </section>
+    </main>
+
+    <footer id="localizacao" class="site-footer" aria-labelledby="location-title" tabindex="-1">
+      <div class="shell footer-inner">
+        <div class="footer-copy">
+          <h2 id="location-title">Onde estamos</h2>
+          <address>
+            <Icon name="pin" size={19} />
+            <span>{shop.address}<br />CEP {shop.postalCode}</span>
+          </address>
+          <a class="directions-link" href={mapDirections} target="_blank" rel="noopener noreferrer">Traçar rota <Icon name="diagonal" size={16} /></a>
+          <div class="footer-contacts">
+            <a href={orderLink()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={17} /> {shop.formattedPhone}</a>
+            <a href={shop.instagram} target="_blank" rel="noopener noreferrer"><Icon name="instagram" size={17} /> @marlycestas</a>
+          </div>
+        </div>
+        <iframe class="store-map" src={mapEmbed} title="Mapa da Marly Cestas e Flores em Fundão, Recife" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe>
+      </div>
+      <div class="shell footer-bottom">
+        <span>Marly Cestas e Flores</span>
+        <button class="motion-toggle" type="button" aria-pressed="false" data-motion-toggle hidden>
+          Animações <span data-motion-state aria-hidden="true">Desligadas</span>
+        </button>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<script>
+  import { hasMotion } from '../motion';
+
+  const tools = document.querySelector<HTMLElement>('[data-catalog-tools]');
+  const search = document.querySelector<HTMLInputElement>('#busca');
+  const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-product]'));
+  const count = document.querySelector<HTMLElement>('[data-result-count]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  const more = document.querySelector<HTMLButtonElement>('[data-more]');
+  const reset = document.querySelector<HTMLButtonElement>('[data-reset]');
+
+  if (tools && search && count && empty && more && reset) {
+    const pageSize = 12;
+    let category = '';
+    let pageLimit = pageSize;
+    const normalize = (value: string) =>
+      value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR').trim();
+    const entries = cards.map(card => ({
+      card,
+      category: card.dataset.category ?? '',
+      terms: normalize(`${card.dataset.name} ${card.dataset.category}`),
+    }));
+    const queryTerms = () => normalize(search.value).split(/\s+/).filter(Boolean);
+    const matchesQuery = (entry: (typeof entries)[number], terms: string[]) =>
+      (!category || entry.category === category) && terms.every(term => entry.terms.includes(term));
+    let productAnimations: Animation[] = [];
+
+    function render(animate = false, onlyNew = false) {
+      const terms = queryTerms();
+      const entering: HTMLElement[] = [];
+      let matched = 0;
+      for (const entry of entries) {
+        const matches = matchesQuery(entry, terms);
+        if (matches) matched++;
+        const hidden = !matches || matched > pageLimit;
+        if (!hidden && (!onlyNew || entry.card.hidden)) entering.push(entry.card);
+        entry.card.hidden = hidden;
+      }
+      for (const animation of productAnimations) animation.cancel();
+      productAnimations = animate && hasMotion() ? entering.slice(0, 6).map((card, index) => card.animate(
+        [{ opacity: 0.55, transform: 'translateY(12px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 300, delay: index * 20, easing: 'cubic-bezier(.16, 1, .3, 1)', fill: 'backwards' },
+      )) : [];
+      count!.textContent = `${matched} ${matched === 1 ? 'produto' : 'produtos'}`;
+      empty!.hidden = matched > 0;
+      more!.hidden = matched <= pageLimit;
+    }
+
+    function selectCategory(nextCategory: string, animate = false) {
+      category = nextCategory;
+      pageLimit = pageSize;
+      for (const button of filters) button.setAttribute('aria-pressed', String(button.dataset.filter === category));
+      render(animate);
+    }
+
+    for (const button of filters) {
+      button.addEventListener('click', event => selectCategory(button.dataset.filter ?? '', event.detail > 0));
+    }
+    for (const collection of document.querySelectorAll<HTMLAnchorElement>('[data-collection]')) {
+      collection.addEventListener('click', event => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        search.value = '';
+        selectCategory(collection.dataset.collection ?? '', event.detail > 0);
+      });
+    }
+    search.addEventListener('input', () => {
+      pageLimit = pageSize;
+      render();
+    });
+    more.addEventListener('click', event => {
+      const terms = queryTerms();
+      const next = entries.find(entry => entry.card.hidden && matchesQuery(entry, terms));
+      pageLimit += pageSize;
+      render(event.detail > 0, true);
+      next?.card.querySelector<HTMLAnchorElement>('a')?.focus();
+    });
+    reset.addEventListener('click', () => {
+      search.value = '';
+      selectCategory('');
+      search.focus();
+    });
+    tools.hidden = false;
+    render();
+  }
+</script>

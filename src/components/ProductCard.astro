@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { formatPrice, orderLink, type Product } from '../catalog';
+import Icon from './Icon.astro';
+
+interface Props {
+  product: Product;
+  photo: ImageMetadata;
+}
+
+const { product, photo } = Astro.props;
+const price = formatPrice(product.price);
+const widths = [320, 480, 640].filter(width => width < photo.width).concat(photo.width);
+const illustrative = product.description?.startsWith('A imagem apresentada');
+---
+
+<li class="product" data-product data-name={product.name} data-category={product.category}>
+  <a class="product-link" href={orderLink(product)} target="_blank" rel="noopener noreferrer">
+    <div class="product-photo">
+      <Image src={photo} alt="" widths={widths} sizes="(min-width: 1120px) 280px, (min-width: 760px) 29vw, (min-width: 360px) 46vw, 90vw" loading="lazy" decoding="async" />
+      {product.oldPrice && <span class="product-promotion">Oferta</span>}
+    </div>
+    <div class="product-details">
+      <div>
+        <h3>{product.name}</h3>
+        {illustrative && <p class="product-note">Foto ilustrativa</p>}
+        <div class="product-prices">
+          <strong>{price}</strong>
+          {product.oldPrice && <del aria-label={`Preço anterior ${formatPrice(product.oldPrice)}`}>{formatPrice(product.oldPrice)}</del>}
+        </div>
+      </div>
+      <span class="product-arrow"><Icon name="diagonal" size={17} /></span>
+      <span class="sr-only">Pedir pelo WhatsApp</span>
+    </div>
+  </a>
+</li>
