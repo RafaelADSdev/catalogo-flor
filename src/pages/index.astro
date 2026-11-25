@@ -52,13 +52,15 @@ const description = 'Veja fotos e preços dos buquês, cestas e presentes da Mar
     <header class="site-header">
       <div class="shell header-inner">
         <a class="brand" href="#inicio">
-          <Image src={logo} alt="" width={56} height={56} />
+          <span class="brand-emblem" aria-hidden="true">
+            <Image src={logo} alt="" width={384} loading="eager" />
+          </span>
           <span><strong>Marly</strong><small>Cestas e Flores</small></span>
         </a>
         <nav aria-label="Navegação principal">
           <a class="nav-catalog nav-link" href="#catalogo">Catálogo</a>
           <a class="nav-link" href="#localizacao">Como chegar</a>
-          <a class="contact-pill" href={orderLink()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={16} /> WhatsApp</a>
+          <a class="contact-pill" href={orderLink()} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><Icon name="whatsapp" size={16} /><span>WhatsApp</span></a>
         </nav>
       </div>
     </header>

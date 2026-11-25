@@ -41,11 +41,22 @@ img { display: block; max-width: 100%; }
 .site-header { background: var(--paper); border-bottom: 1px solid #6235461f; }
 .header-inner { min-height: 5.15rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .brand, .header-inner nav { display: flex; align-items: center; }
-.brand { gap: .62rem; flex: none; }
-.brand img { width: 3rem; height: 3rem; border-radius: .45rem; }
+.brand { gap: .72rem; flex: none; }
+.brand-emblem {
+  position: relative; display: block; flex: none; width: 3.9rem; aspect-ratio: 1.65;
+  overflow: hidden; isolation: isolate; border-radius: .85rem; background: var(--blush);
+  border: 1px solid #c886905e;
+}
+.brand-emblem img {
+  position: absolute; inset: -15.7% auto auto 50%; transform: translateX(-50%);
+  max-width: none; width: 300%; height: auto;
+}
 .brand strong, .brand small { display: block; }
-.brand strong { font: 640 1.65rem/.95 var(--display); letter-spacing: -.025em; color: var(--berry); }
-.brand small { margin-top: .26rem; font-size: .7rem; font-weight: 650; color: var(--muted); white-space: nowrap; }
+.brand strong { font: 620 1.9rem/.95 var(--display); letter-spacing: -.037em; color: var(--berry); }
+.brand small {
+  margin-top: .31rem; color: var(--muted); white-space: nowrap; font-size: .67rem;
+  font-weight: 730; letter-spacing: .09em; text-transform: uppercase;
+}
 .header-inner nav { gap: 1.55rem; font-weight: 700; font-size: .91rem; color: var(--berry); }
 .nav-link { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
 .nav-link:hover { text-decoration: underline; text-underline-offset: .26em; }
@@ -234,10 +245,10 @@ html[data-motion="full"] .rail-in-view .collection-link:nth-child(3) { animation
 @media (max-width: 799px) {
   .shell { width: calc(100% - 2rem); }
   .header-inner { min-height: 4.45rem; gap: .6rem; }
-  .brand { gap: .46rem; }
-  .brand img { width: 2.42rem; height: 2.42rem; }
-  .brand strong { font-size: 1.4rem; }
-  .brand small { font-size: .64rem; }
+  .brand { gap: .5rem; }
+  .brand-emblem { width: 3.23rem; border-radius: .68rem; }
+  .brand strong { font-size: 1.57rem; }
+  .brand small { font-size: .61rem; letter-spacing: .06em; }
   .header-inner nav { gap: .68rem; font-size: .79rem; }
   .nav-catalog { display: none; }
   .contact-pill { padding: .4rem .63rem; gap: .38rem; }
@@ -267,12 +278,13 @@ html[data-motion="full"] .rail-in-view .collection-link:nth-child(3) { animation
   .collection-link span { margin: .43rem; padding: .2rem .3rem; font-size: .82rem; }
   .collection-link svg { display: none; }
 }
+@media (max-width: 389px) {
+  .contact-pill { width: 2.75rem; padding-inline: 0; }
+  .contact-pill span { display: none; }
+}
 @media (max-width: 359px) {
-  .brand img { width: 2.15rem; height: 2.15rem; }
-  .brand small { font-size: .59rem; }
+  .brand-emblem { width: 3rem; }
   .header-inner nav { gap: .38rem; font-size: .72rem; }
-  .contact-pill { padding-inline: .42rem; }
-  .contact-pill svg { display: none; }
   .hero-copy h1 { font-size: 2.62rem; }
   .product-details { gap: .29rem; }
   .product-arrow svg { width: .9rem; height: .9rem; }
